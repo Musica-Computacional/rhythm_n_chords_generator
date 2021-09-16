@@ -4878,6 +4878,7 @@ GameObject:
   - component: {fileID: 1504608337}
   - component: {fileID: 1504608336}
   - component: {fileID: 1504608341}
+  - component: {fileID: 1504608339}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -4892,7 +4893,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1504608335}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1c8fc2c0e118ef6448196982b4019bfb, type: 3}
   m_Name: 
@@ -4906,14 +4907,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1504608335}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3697931126a4db947b9c78714fc1d1ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  string_seed: 
+  string_seed: seed
   use_string_seed: 1
-  random_seed: 0
   seed: 1234
   TextInput: {fileID: 1046075228}
 --- !u!4 &1504608338
@@ -4930,6 +4930,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1504608339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1504608335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eae177297f0747f4381f9874ea810330, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  note_name: C
 --- !u!82 &1504608341
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4937,7 +4950,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1504608335}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
@@ -5033,7 +5046,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1504608335}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5c4f1ac2c2c77f44ab5e16c98b717847, type: 3}
   m_Name: 
@@ -5067,6 +5080,31 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a428c2041930bd443abd1156f5f78ccb, type: 3}
   - {fileID: 8300000, guid: e6c5a1d6ed2b8a948a07d0d886de2806, type: 3}
   style: 0
+  notes_list:
+  - {fileID: 8300000, guid: d30ef1ae016483d4d8e7345339f48647, type: 3}
+  - {fileID: 8300000, guid: 8c62601d8a586ac4d881e165351685f8, type: 3}
+  - {fileID: 8300000, guid: a3125d0d33ab97745ad9407b966124c6, type: 3}
+  - {fileID: 8300000, guid: 66f6f23f7f379cd49999b68d611ab794, type: 3}
+  - {fileID: 8300000, guid: 0bcb46a83f013d040b1b4e6313502610, type: 3}
+  - {fileID: 8300000, guid: 7fdf824e1dd4ab64f9575b5a5e372a39, type: 3}
+  - {fileID: 8300000, guid: 894b5b9b77d1f3f4f9f2e3f5e27c5c99, type: 3}
+  - {fileID: 8300000, guid: 13617ff63ffc931438b633c0d95ff286, type: 3}
+  - {fileID: 8300000, guid: 5cf20fd4953fb424d89397a2356388be, type: 3}
+  - {fileID: 8300000, guid: 14fdad13b22cecd42a4c8b4f82becf85, type: 3}
+  - {fileID: 8300000, guid: 04bc5e637210f2b41923087933f95ab4, type: 3}
+  - {fileID: 8300000, guid: c1791d3d7b09e744f8a69e9cce699ce6, type: 3}
+  - {fileID: 8300000, guid: ac8a6c1fbc297db489ff288ba0c16dc4, type: 3}
+  - {fileID: 8300000, guid: e67d9a9f2430de54e82a717d0d9c28ba, type: 3}
+  - {fileID: 8300000, guid: 750d29e9bdeb48240a7de2afd148f07d, type: 3}
+  - {fileID: 8300000, guid: 5e0892daf0137bb4a8e6d3f38030afde, type: 3}
+  - {fileID: 8300000, guid: 5332c6974cb68d145b7e978dc587121e, type: 3}
+  - {fileID: 8300000, guid: 8d3ce5a1d1c2cce40ae590d5098461f6, type: 3}
+  - {fileID: 8300000, guid: 534d42dd9e4c92546b1b145b62a03c21, type: 3}
+  - {fileID: 8300000, guid: 23045fa7302e43b4083777fa43e20423, type: 3}
+  - {fileID: 8300000, guid: 67478b4c2c0a06744a75e255e66e57b9, type: 3}
+  - {fileID: 8300000, guid: 9d51bf01d25080042b9018f77338f7b3, type: 3}
+  - {fileID: 8300000, guid: 7182f943cf3e8ad4a81ef6f257e7a97b, type: 3}
+  - {fileID: 8300000, guid: 375503ac4d64d5a42b0d88fa14bacdba, type: 3}
   playMetronome: 1
   counterControl: 0
   counter: 0

@@ -19,7 +19,6 @@ public class Player : MonoBehaviour
     public Text metricText;
     public Text claveText;
     public Text fillerText;
-    //UI things -----------------------------
 
 
     //variables -------------------------------------------------------------
@@ -29,19 +28,21 @@ public class Player : MonoBehaviour
 
     //Samples -------------------------------------------------------------
     public AudioSource audioSource;
+    //rhythm
     public List<AudioClip> tick;
     public List<AudioClip> metric;
     public List<AudioClip> clave;
     public List<AudioClip> filler;
     public int style;
+    //harmony
+    public List<AudioClip> notes_list;
 
+    //Rythm related
     List<List<int>> rythm = new List<List<int>>();
-
     List<int> metric_pattern = new List<int>();
     List<int> clave_pattern = new List<int>();
     List<int> clave_pattern_int = new List<int>();
     List<int> filler_pattern = new List<int>();
-
     bool random_filler;
 
     //Metronome -----------------------------
@@ -49,7 +50,7 @@ public class Player : MonoBehaviour
     public int counterControl = 0;
     public int counter = 0;
 
-    //Corutine
+    //Coroutine
     Coroutine co;
 
     void Start()
@@ -97,6 +98,7 @@ public class Player : MonoBehaviour
         Debug.Log("clave_pattern:  " + string.Join(",", clave_pattern));
         Debug.Log("fill_pattern:   " + string.Join(",", filler_pattern));
     }
+
 
 
     private bool EvalFillerPattern()
@@ -197,8 +199,7 @@ public class Player : MonoBehaviour
                     audioSource.PlayOneShot(clave[style], 0.5f);
                     audioSource.PlayOneShot(filler[style], 0.3f);
                 }
-
-
+                
                 counter++;
                 if (time_signature.StartsWith("4"))
                 {

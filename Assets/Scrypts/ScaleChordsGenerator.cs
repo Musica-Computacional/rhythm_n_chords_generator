@@ -4,21 +4,24 @@ using UnityEngine;
 
 public class ScaleChordsGenerator : MonoBehaviour
 {
+
+    public string note_name = "C";
+
     private List<string> circulo_quintas_mayores = new List<string>() { "C", "G", "D", "A", "E", "B", "Gb", "Db", "Ab", "Eb", "Bb", "F" };
     private List<string> circulo_quintas_menores = new List<string>() { "Am", "Em", "Bm", "F#m", "C#m", "G#m", "Ebm", "Bbm", "Fm", "Cm", "Gm", "Dm" };
 
     private List<string> escala_cromatica = new List<string>() { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B",  "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
     private Dictionary<string, string> sharpsNFlats = new Dictionary<string, string>() { 
-        { "C#"  ,"Db" },
+        { "C#"  ,"Db"  },
         { "C#m" ,"Dbm" },
-        { "D#"  ,"Eb" },
+        { "D#"  ,"Eb"  },
         { "D#m" ,"Ebm" },
-        { "F#"  ,"Gb" },
+        { "F#"  ,"Gb"  },
         { "F#m" ,"Gbm" },
-        { "G#"  ,"Ab" },
+        { "G#"  ,"Ab"  },
         { "G#m" ,"Abm" },
-        { "A#"  ,"Bb" },
+        { "A#"  ,"Bb"  },
         { "A#m" ,"Bbm" },
     };
 
@@ -27,7 +30,7 @@ public class ScaleChordsGenerator : MonoBehaviour
         { 2,"II   Subdominante" },
         { 3,"III  Tonica" },
         { 4,"IV   Subdominante" },
-        { 5,"V    Dominante" },
+        { 5,"V    Dominante" }, //cambiado a novena con bajo en la 5ta por que la sonoridad de maj7 no suena bien.
         { 6,"VI   Tonica" },
         { 7,"VII° Sensible" }
     };
@@ -35,7 +38,8 @@ public class ScaleChordsGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        List<List<string>> chords_listt = scaleFromNote(note_name);
+        progressionGenerator(chords_listt);
     }
 
     // Update is called once per frame
@@ -119,9 +123,18 @@ public class ScaleChordsGenerator : MonoBehaviour
 
                 for (int c = 0; c < arranged_scale.Count; c++)
                 {
-                    Debug.Log(romanNumbers[c + 1] + ": " + arranged_scale[c] + " - " + notesFromChord(arranged_scale[c]));
+                    string the_chord;
+                    if(c == 4)
+                    {
+                        the_chord = string.Join(",", notesFromChord(arranged_scale[c],false,true));
+                    }
+                    else
+                    {
+                        the_chord = string.Join(",", notesFromChord(arranged_scale[c]));
+                    }
+                    
+                    Debug.Log(romanNumbers[c + 1] + ": " + arranged_scale[c] + " - " + the_chord);
                     chords_list.Add(notesFromChord(arranged_scale[c]));
-
                 }
             }
             else
@@ -142,7 +155,17 @@ public class ScaleChordsGenerator : MonoBehaviour
 
                 for (int c = 0; c < arranged_scale.Count; c++)
                 {
-                    Debug.Log(romanNumbers[c + 1] + ": " + arranged_scale[c] + " - " + notesFromChord(arranged_scale[c],true));
+                    string the_chord;
+                    if (c == 4)
+                    {
+                        the_chord = string.Join(",", notesFromChord(arranged_scale[c], true, true));
+                    }
+                    else
+                    {
+                        the_chord = string.Join(",", notesFromChord(arranged_scale[c], true));
+                    }
+                    
+                    Debug.Log(romanNumbers[c + 1] + ": " + arranged_scale[c] + " - " + the_chord);
                     chords_list.Add(notesFromChord(arranged_scale[c],true));
                 }
             }
@@ -157,7 +180,7 @@ public class ScaleChordsGenerator : MonoBehaviour
 
     }
 
-    private List<string> notesFromChord(string chord, bool flat_scale=false)
+    private List<string> notesFromChord(string chord, bool flat_scale=false,bool dominant=false)
     {
         bool minor = false;
         bool flat = false;
@@ -182,26 +205,49 @@ public class ScaleChordsGenerator : MonoBehaviour
             int index = escala_cromatica.IndexOf(chord);
             List<string> chord_notes = new List<string>();
 
+            //for alterarations
+            int bass_note;
+            int ninth_note;
+
+            //for no altered chords
             int first_note;
             int third_note;
             int fifth_note;
             int seventh_note;
 
-            if (minor){
+            if (dominant) { //siempre sera mayor
+                first_note = 1 + index;
+                ninth_note = 3 + index;
+                third_note = 5 + index;
+                fifth_note = 8 + index;
+                bass_note = fifth_note - 12;
+                chord_notes.Add(escala_cromatica[bass_note - 1]);
+                chord_notes.Add(escala_cromatica[first_note - 1]);
+                chord_notes.Add(escala_cromatica[ninth_note - 1]);
+                chord_notes.Add(escala_cromatica[third_note - 1]);
+                chord_notes.Add(escala_cromatica[fifth_note - 1]);
+            }
+            else if (minor){
                 first_note = 1 + index;
                 third_note = 4 + index;
                 fifth_note = 8 + index;
                 seventh_note = 11 + index;
-            }else{
+                chord_notes.Add(escala_cromatica[first_note - 1]);
+                chord_notes.Add(escala_cromatica[third_note - 1]);
+                chord_notes.Add(escala_cromatica[fifth_note - 1]);
+                chord_notes.Add(escala_cromatica[seventh_note - 1]);
+            }
+            else{
                 first_note = 1 + index;
                 third_note = 5 + index;
                 fifth_note = 8 + index;
                 seventh_note = 12 + index;
+                chord_notes.Add(escala_cromatica[first_note - 1]);
+                chord_notes.Add(escala_cromatica[third_note - 1]);
+                chord_notes.Add(escala_cromatica[fifth_note - 1]);
+                chord_notes.Add(escala_cromatica[seventh_note - 1]);
             }
-            chord_notes.Add(escala_cromatica[first_note - 1]);
-            chord_notes.Add(escala_cromatica[third_note - 1]);
-            chord_notes.Add(escala_cromatica[fifth_note - 1]);
-            chord_notes.Add(escala_cromatica[seventh_note - 1]);
+            
 
             if (flat){
                 List<string> arranged_chord_notes = new List<string>();
@@ -223,4 +269,472 @@ public class ScaleChordsGenerator : MonoBehaviour
         }
     }
 
+    public List<string> progressionGenerator(List<List<string>> chords_list){
+        Dictionary<string, List<string>> chords_dict = new Dictionary<string, List<string>>(){
+            {"1", chords_list[0]},
+            {"2", chords_list[1]},
+            {"3", chords_list[2]},
+            {"4", chords_list[3]},
+            {"5", chords_list[4]},
+            {"6", chords_list[5]},
+            {"7", chords_list[6]},
+        };
+        List<string> tonics = new List<string>() { "1", "3", "6" };
+        List<string> subdominants = new List<string>() { "2", "4" };
+        List<string> dominants = new List<string>() { "5" };
+        List<string> sensibles = new List<string>() { "7" };
+        //32 compases aprox un minuto de cancion. 
+
+
+
+        List<string> progression = new List<string>();
+
+        List<string> verse1 = verseGenerator(tonics, subdominants);
+        List<string> verse2 = verseGenerator(tonics, subdominants);
+        for (int i = 0; i < verse1.Count; i++){
+            progression.Add(verse1[i]);
+        }
+        for (int i = 0; i < verse2.Count; i++){
+            progression.Add(verse2[i]);
+        }
+        List<string> chorus1 = chorusGenerator(tonics, subdominants, dominants, sensibles,1);
+        for (int i = 0; i < chorus1.Count; i++) {
+            progression.Add(chorus1[i]);
+        }
+        for (int i = 0; i < verse2.Count; i++)
+        {
+            progression.Add(verse2[i]);
+        }
+        List<string> chorus2 = chorusGenerator(tonics, subdominants, dominants, sensibles, 2);
+        for (int i = 0; i < chorus2.Count; i++)
+        {
+            progression.Add(chorus2[i]);
+        }
+
+
+        Debug.Log("progression");
+        Debug.Log(string.Join(",", progression));
+        return progression;
+    }
+
+
+    private List<string> verseGenerator(List<string> tonics, List<string> subdominants)
+    {
+        List<string> progression = new List<string>();
+
+        int random_tonic;
+        int random_subd;
+        for (int i = 1; i < 5; i++)
+        {
+            random_tonic = Random.Range(0, 3); //plus 1 because the max value is not included
+            random_subd = Random.Range(0, 2); //plus 1 because the max value is not included
+            //primer compas siempre tendra el primer acorde de tonica
+            if (i == 1)
+            {
+                progression.Add(tonics[0]); //"1"
+                progression.Add(tonics[0]); //"1"
+                progression.Add(tonics[0]); //"1"
+                progression.Add(tonics[0]); //"1"
+            
+            }
+            else if (4 % i == 0) // compases pares tendran tonica o subdominante
+            {
+                int choice = Random.Range(0, 2); //plus 1 because the max value is not included
+                if (choice == 0)
+                { //se escogio tonica 
+                    string ton = tonics[random_tonic];
+                    //si el acorde de este compas es igual al acorde del anterior
+                    Debug.Log(i);
+                    if (ton == progression[progression.Count - 1])
+                    {
+                        List<string> tonics_without_repeated_chord = new List<string>();
+                        for (int e = 0; e < tonics.Count; e++)
+                        {
+                            tonics_without_repeated_chord.Add(tonics[e]);
+                        }
+                        tonics_without_repeated_chord.Remove(ton);
+                        int random_tonicc = Random.Range(0, 2); //plus 1 because the max value is not included
+
+                        progression.Add(tonics_without_repeated_chord[random_tonicc]);
+                        progression.Add(tonics_without_repeated_chord[random_tonicc]);
+                        progression.Add(tonics_without_repeated_chord[random_tonicc]);
+                        progression.Add(tonics_without_repeated_chord[random_tonicc]);
+                    }
+                    else
+                    {
+                        progression.Add(ton);
+                        progression.Add(ton);
+                        progression.Add(ton);
+                        progression.Add(ton);
+                    }
+                }
+                else
+                {
+                    string subd = subdominants[random_subd];
+                    //si el acorde de este compas es igual al acorde del anterior
+                    if (subd == progression[progression.Count - 1])
+                    {
+                        List<string> subdominants_withou_repeated_chord = new List<string>();
+                        for (int e = 0; e < subdominants.Count; e++)
+                        {
+                            subdominants_withou_repeated_chord.Add(tonics[e]);
+                        }
+                        subdominants_withou_repeated_chord.Remove(subd);
+
+                        progression.Add(subdominants_withou_repeated_chord[0]);
+                        progression.Add(subdominants_withou_repeated_chord[0]);
+                        progression.Add(subdominants_withou_repeated_chord[0]);
+                        progression.Add(subdominants_withou_repeated_chord[0]);
+                    }
+                    else
+                    {
+                        progression.Add(subd);
+                        progression.Add(subd);
+                        progression.Add(subd);
+                        progression.Add(subd);
+                    }
+                }
+            }
+            else
+            {
+                //primer acorde de tonica
+                progression.Add(tonics[0]); //"1"
+                progression.Add(tonics[0]); //"1"
+                progression.Add(tonics[0]); //"1"
+                progression.Add(tonics[0]); //"1"
+            }
+        }
+        return progression;
+    }
+
+    private List<string> chorusGenerator(List<string> tonics, List<string> subdominants, List<string> dominants, List<string> sensibles,int chorus = 1)
+    {
+        List<string> progression = new List<string>();
+
+        List<string> tonics_without_base_note = new List<string>();
+        for (int e = 0; e < tonics.Count; e++)
+        {
+            tonics_without_base_note.Add(tonics[e]);
+        }
+        tonics_without_base_note.Remove("1");
+
+        int random_tonic;
+        int random_subd;
+
+        if(chorus == 1)
+        {
+            for (int i = 1; i < 5; i++)
+            {
+                random_tonic = Random.Range(0, 3); //plus 1 because the max value is not included
+                random_subd = Random.Range(0, 2); //plus 1 because the max value is not included
+                //primer compas siempre tendra tonica
+                if (i == 1)
+                {
+                    progression.Add(tonics_without_base_note[random_tonic]); //3 or 6, except 1
+                    progression.Add(tonics_without_base_note[random_tonic]); //3 or 6, except 1
+                    progression.Add(tonics_without_base_note[random_tonic]); //3 or 6, except 1
+                    progression.Add(tonics_without_base_note[random_tonic]); //3 or 6, except 1
+                }
+                else if (4 % i == 0) // compases pares tendran tonica o subdominante
+                {
+                    int choice = Random.Range(0, 4); //plus 1 because the max value is not included
+                    if (choice == 0)
+                    { //sera tonica 
+                        string ton = tonics[random_tonic];
+                        //si el acorde de este compas es igual al acorde del anterior
+                        Debug.Log(i);
+                        if (ton == progression[progression.Count - 1])
+                        {
+                            List<string> tonics_without_repeated_chord = new List<string>();
+                            for (int e = 0; e < tonics.Count; e++)
+                            {
+                                tonics_without_repeated_chord.Add(tonics[e]);
+                            }
+                            tonics_without_repeated_chord.Remove(ton);
+                            int random_tonicc = Random.Range(0, 2); //plus 1 because the max value is not included
+
+                            progression.Add(tonics_without_repeated_chord[random_tonicc]);
+                            progression.Add(tonics_without_repeated_chord[random_tonicc]);
+                            progression.Add(tonics_without_repeated_chord[random_tonicc]);
+                            progression.Add(tonics_without_repeated_chord[random_tonicc]);
+                        }
+                        else
+                        {
+                            progression.Add(ton);
+                            progression.Add(ton);
+                            progression.Add(ton);
+                            progression.Add(ton);
+                        }
+                    }
+                    else if (choice == 1)
+                    {//sera subdominante
+                        string subd = subdominants[random_subd];
+                        //si el acorde de este compas es igual al acorde del anterior
+                        if (subd == progression[progression.Count - 1])
+                        {
+                            List<string> subdominants_withou_repeated_chord = new List<string>();
+                            for (int e = 0; e < subdominants.Count; e++)
+                            {
+                                subdominants_withou_repeated_chord.Add(tonics[e]);
+                            }
+                            subdominants_withou_repeated_chord.Remove(subd);
+
+                            progression.Add(subdominants_withou_repeated_chord[0]);
+                            progression.Add(subdominants_withou_repeated_chord[0]);
+                            progression.Add(subdominants_withou_repeated_chord[0]);
+                            progression.Add(subdominants_withou_repeated_chord[0]);
+                        }
+                        else
+                        {
+                            progression.Add(subd);
+                            progression.Add(subd);
+                            progression.Add(subd);
+                            progression.Add(subd);
+                        }
+                    }
+                    else if (choice == 2)
+                    {//sera dominante
+                        string dom = dominants[0];
+                        progression.Add(dom);
+                        progression.Add(dom);
+                        progression.Add(dom);
+                        progression.Add(dom);
+
+                    }
+                    else if (choice == 3)
+                    {//sera sensible
+                        string sens = sensibles[0];
+                        progression.Add(sens);
+                        progression.Add(sens);
+                        progression.Add(sens);
+                        progression.Add(sens);
+
+                    }
+                }
+                else
+                {
+                    string ton = tonics_without_base_note[random_tonic];
+                    if (ton == progression[progression.Count - 1])
+                    {
+                        List<string> tonics_without_repeated_chord = new List<string>();
+                        for (int e = 0; e < tonics_without_base_note.Count; e++)
+                        {
+                            tonics_without_repeated_chord.Add(tonics[e]);
+                        }
+                        tonics_without_repeated_chord.Remove(ton);
+
+                        progression.Add(tonics_without_repeated_chord[0]);
+                        progression.Add(tonics_without_repeated_chord[0]);
+                        progression.Add(tonics_without_repeated_chord[0]);
+                        progression.Add(tonics_without_repeated_chord[0]);
+                    }
+                    else
+                    {
+                        progression.Add(ton); //3 or 6, except 1
+                        progression.Add(ton); //3 or 6, except 1
+                        progression.Add(ton); //3 or 6, except 1
+                        progression.Add(ton); //3 or 6, except 1
+                    }
+                }
+            }
+        }
+        else if (chorus == 2) //this chorus, does not have sensibles and can include the base tonic chord
+        {
+            for (int i = 1; i < 5; i++)
+            {
+                random_tonic = Random.Range(0, 3); //plus 1 because the max value is not included
+                random_subd = Random.Range(0, 2); //plus 1 because the max value is not included
+                                                  //primer compas siempre tendra tonica
+                if (i == 1)
+                {
+                    progression.Add(tonics[random_tonic]); //3 or 6, except 1
+                    progression.Add(tonics[random_tonic]); //3 or 6, except 1
+                    progression.Add(tonics[random_tonic]); //3 or 6, except 1
+                    progression.Add(tonics[random_tonic]); //3 or 6, except 1
+                }
+                else if (4 % i == 0) // compases pares tendran tonica o subdominante
+                {
+                    int choice = Random.Range(0, 3); //plus 1 because the max value is not included
+                    if (choice == 0)
+                    { //se escogio tonica 
+                        string ton = tonics[random_tonic];
+                        //si el acorde de este compas es igual al acorde del anterior
+                        Debug.Log(i);
+                        if (ton == progression[progression.Count - 1])
+                        {
+                            List<string> tonics_without_repeated_chord = new List<string>();
+                            for (int e = 0; e < tonics.Count; e++)
+                            {
+                                tonics_without_repeated_chord.Add(tonics[e]);
+                            }
+                            tonics_without_repeated_chord.Remove(ton);
+                            int random_tonicc = Random.Range(0, 2); //plus 1 because the max value is not included
+
+                            progression.Add(tonics_without_repeated_chord[random_tonicc]);
+                            progression.Add(tonics_without_repeated_chord[random_tonicc]);
+                            progression.Add(tonics_without_repeated_chord[random_tonicc]);
+                            progression.Add(tonics_without_repeated_chord[random_tonicc]);
+                        }
+                        else
+                        {
+                            progression.Add(ton);
+                            progression.Add(ton);
+                            progression.Add(ton);
+                            progression.Add(ton);
+                        }
+                    }
+                    else if (choice == 1)
+                    {//sera subdominante
+                        string subd = subdominants[random_subd];
+                        //si el acorde de este compas es igual al acorde del anterior
+                        if (subd == progression[progression.Count - 1])
+                        {
+                            List<string> subdominants_withou_repeated_chord = new List<string>();
+                            for (int e = 0; e < subdominants.Count; e++)
+                            {
+                                subdominants_withou_repeated_chord.Add(tonics[e]);
+                            }
+                            subdominants_withou_repeated_chord.Remove(subd);
+
+                            progression.Add(subdominants_withou_repeated_chord[0]);
+                            progression.Add(subdominants_withou_repeated_chord[0]);
+                            progression.Add(subdominants_withou_repeated_chord[0]);
+                            progression.Add(subdominants_withou_repeated_chord[0]);
+                        }
+                        else
+                        {
+                            progression.Add(subd);
+                            progression.Add(subd);
+                            progression.Add(subd);
+                            progression.Add(subd);
+                        }
+                    }
+                    else if (choice == 2)
+                    {//sera dominante
+                        string dom = dominants[0];
+                        progression.Add(dom);
+                        progression.Add(dom);
+                        progression.Add(dom);
+                        progression.Add(dom);
+                    }
+                }
+                else
+                {
+                    string ton = tonics[random_tonic];
+                    if (ton == progression[progression.Count - 1])
+                    {
+                        List<string> tonics_without_repeated_chord = new List<string>();
+                        for (int e = 0; e < tonics.Count; e++)
+                        {
+                            tonics_without_repeated_chord.Add(tonics[e]);
+                        }
+                        tonics_without_repeated_chord.Remove(ton);
+
+                        progression.Add(tonics_without_repeated_chord[0]);
+                        progression.Add(tonics_without_repeated_chord[0]);
+                        progression.Add(tonics_without_repeated_chord[0]);
+                        progression.Add(tonics_without_repeated_chord[0]);
+                    }
+                    else
+                    {
+                        progression.Add(ton); //3 or 6, except 1
+                        progression.Add(ton); //3 or 6, except 1
+                        progression.Add(ton); //3 or 6, except 1
+                        progression.Add(ton); //3 or 6, except 1
+                    }
+                }
+            }
+        }
+        
+        return progression;
+    }
+
+    private List<string> autroGenerator(List<string> tonics, List<string> subdominants)
+    {
+        List<string> progression = new List<string>();
+
+        int random_tonic;
+        int random_subd;
+        for (int i = 1; i < 5; i++)
+        {
+            random_tonic = Random.Range(0, 3); //plus 1 because the max value is not included
+            random_subd = Random.Range(0, 2); //plus 1 because the max value is not included
+            //primer compas siempre tendra el primer acorde de tonica
+            if (i == 1)
+            {
+                progression.Add(tonics[0]); //"1"
+                progression.Add(tonics[0]); //"1"
+                progression.Add(tonics[0]); //"1"
+                progression.Add(tonics[0]); //"1"
+
+            }
+            else if (4 % i == 0) // compases pares tendran tonica o subdominante
+            {
+                int choice = Random.Range(0, 2); //plus 1 because the max value is not included
+                if (choice == 0)
+                { //se escogio tonica 
+                    string ton = tonics[random_tonic];
+                    //si el acorde de este compas es igual al acorde del anterior
+                    Debug.Log(i);
+                    if (ton == progression[progression.Count - 1])
+                    {
+                        List<string> tonics_without_repeated_chord = new List<string>();
+                        for (int e = 0; e < tonics.Count; e++)
+                        {
+                            tonics_without_repeated_chord.Add(tonics[e]);
+                        }
+                        tonics_without_repeated_chord.Remove(ton);
+                        int random_tonicc = Random.Range(0, 2); //plus 1 because the max value is not included
+
+                        progression.Add(tonics_without_repeated_chord[random_tonicc]);
+                        progression.Add(tonics_without_repeated_chord[random_tonicc]);
+                        progression.Add(tonics_without_repeated_chord[random_tonicc]);
+                        progression.Add(tonics_without_repeated_chord[random_tonicc]);
+                    }
+                    else
+                    {
+                        progression.Add(ton);
+                        progression.Add(ton);
+                        progression.Add(ton);
+                        progression.Add(ton);
+                    }
+                }
+                else
+                {
+                    string subd = subdominants[random_subd];
+                    //si el acorde de este compas es igual al acorde del anterior
+                    if (subd == progression[progression.Count - 1])
+                    {
+                        List<string> subdominants_withou_repeated_chord = new List<string>();
+                        for (int e = 0; e < subdominants.Count; e++)
+                        {
+                            subdominants_withou_repeated_chord.Add(tonics[e]);
+                        }
+                        subdominants_withou_repeated_chord.Remove(subd);
+
+                        progression.Add(subdominants_withou_repeated_chord[0]);
+                        progression.Add(subdominants_withou_repeated_chord[0]);
+                        progression.Add(subdominants_withou_repeated_chord[0]);
+                        progression.Add(subdominants_withou_repeated_chord[0]);
+                    }
+                    else
+                    {
+                        progression.Add(subd);
+                        progression.Add(subd);
+                        progression.Add(subd);
+                        progression.Add(subd);
+                    }
+                }
+            }
+            else
+            {
+                //primer acorde de tonica
+                progression.Add(tonics[0]); //"1"
+                progression.Add(tonics[0]); //"1"
+                progression.Add(tonics[0]); //"1"
+                progression.Add(tonics[0]); //"1"
+            }
+        }
+        return progression;
+    }
 }
