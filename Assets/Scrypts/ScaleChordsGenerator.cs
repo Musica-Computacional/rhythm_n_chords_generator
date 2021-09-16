@@ -10,7 +10,8 @@ public class ScaleChordsGenerator : MonoBehaviour
     private List<string> circulo_quintas_mayores = new List<string>() { "C", "G", "D", "A", "E", "B", "Gb", "Db", "Ab", "Eb", "Bb", "F" };
     private List<string> circulo_quintas_menores = new List<string>() { "Am", "Em", "Bm", "F#m", "C#m", "G#m", "Ebm", "Bbm", "Fm", "Cm", "Gm", "Dm" };
 
-    private List<string> escala_cromatica = new List<string>() { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B",  "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+    private List<string> escala_cromatica_8ve   = new List<string>() { "C3", "C3#", "D3", "D3#", "E3", "F3", "F3#", "G3", "G3#", "A3", "A3#", "B3", "C4", "C4#", "D4", "D4#", "E4", "F4", "F4#", "G4", "G4#", "A4", "A4#", "B4", "C5", "C5#", "D5" };
+    private List<string> escala_cromatica       = new List<string>() { "C",  "C#",  "D",  "D#",  "E",  "F",  "F#",  "G",  "G#",  "A",  "A#",  "B",  "C",  "C#",  "D",  "D#",  "E",  "F",  "F#",  "G",  "G#",  "A",  "A#",  "B",  "C",  "C#",  "D"  };
 
     private Dictionary<string, string> sharpsNFlats = new Dictionary<string, string>() { 
         { "C#"  ,"Db"  },
@@ -23,6 +24,30 @@ public class ScaleChordsGenerator : MonoBehaviour
         { "G#m" ,"Abm" },
         { "A#"  ,"Bb"  },
         { "A#m" ,"Bbm" },
+    };
+
+    private Dictionary<string, string> sharpsNFlats_8ve = new Dictionary<string, string>() {
+        { "C3#"  ,"D3b"  },
+        { "C3#m" ,"D3bm" },
+        { "D3#"  ,"E3b"  },
+        { "D3#m" ,"E3bm" },
+        { "F3#"  ,"G3b"  },
+        { "F3#m" ,"G3bm" },
+        { "G3#"  ,"A3b"  },
+        { "G3#m" ,"A3bm" },
+        { "A3#"  ,"B3b"  },
+        { "A3#m" ,"B3bm" },
+
+        { "C4#"  ,"D4b"  },
+        { "C4#m" ,"D4bm" },
+        { "D4#"  ,"E4b"  },
+        { "D4#m" ,"E4bm" },
+        { "F4#"  ,"G4b"  },
+        { "F4#m" ,"G4bm" },
+        { "G4#"  ,"A4b"  },
+        { "G4#m" ,"A4bm" },
+        { "A4#"  ,"B4b"  },
+        { "A4#m" ,"B4bm" },
     };
 
     private Dictionary<int, string> romanNumbers = new Dictionary<int, string>() {
@@ -49,7 +74,7 @@ public class ScaleChordsGenerator : MonoBehaviour
     }
 
     private string getSharpsFromFlat(string val){   
-        foreach (KeyValuePair<string, string> chord in sharpsNFlats){
+        foreach (KeyValuePair<string, string> chord in sharpsNFlats_8ve){
             if (val.Equals(chord.Value)){
                 return chord.Key;
             }
@@ -145,7 +170,7 @@ public class ScaleChordsGenerator : MonoBehaviour
                     string chord = scale[i];
                     if (chord.Contains("#"))
                     {
-                        arranged_scale.Add(sharpsNFlats[chord]);
+                        arranged_scale.Add(sharpsNFlats_8ve[chord]);
                     }
                     else
                     {
@@ -221,31 +246,31 @@ public class ScaleChordsGenerator : MonoBehaviour
                 third_note = 5 + index;
                 fifth_note = 8 + index;
                 bass_note = fifth_note - 12;
-                chord_notes.Add(escala_cromatica[bass_note - 1]);
-                chord_notes.Add(escala_cromatica[first_note - 1]);
-                chord_notes.Add(escala_cromatica[ninth_note - 1]);
-                chord_notes.Add(escala_cromatica[third_note - 1]);
-                chord_notes.Add(escala_cromatica[fifth_note - 1]);
+                chord_notes.Add(escala_cromatica_8ve[bass_note - 1]);
+                chord_notes.Add(escala_cromatica_8ve[first_note - 1]);
+                chord_notes.Add(escala_cromatica_8ve[ninth_note - 1]);
+                chord_notes.Add(escala_cromatica_8ve[third_note - 1]);
+                chord_notes.Add(escala_cromatica_8ve[fifth_note - 1]);
             }
             else if (minor){
                 first_note = 1 + index;
                 third_note = 4 + index;
                 fifth_note = 8 + index;
                 seventh_note = 11 + index;
-                chord_notes.Add(escala_cromatica[first_note - 1]);
-                chord_notes.Add(escala_cromatica[third_note - 1]);
-                chord_notes.Add(escala_cromatica[fifth_note - 1]);
-                chord_notes.Add(escala_cromatica[seventh_note - 1]);
+                chord_notes.Add(escala_cromatica_8ve[first_note - 1]);
+                chord_notes.Add(escala_cromatica_8ve[third_note - 1]);
+                chord_notes.Add(escala_cromatica_8ve[fifth_note - 1]);
+                chord_notes.Add(escala_cromatica_8ve[seventh_note - 1]);
             }
             else{
                 first_note = 1 + index;
                 third_note = 5 + index;
                 fifth_note = 8 + index;
                 seventh_note = 12 + index;
-                chord_notes.Add(escala_cromatica[first_note - 1]);
-                chord_notes.Add(escala_cromatica[third_note - 1]);
-                chord_notes.Add(escala_cromatica[fifth_note - 1]);
-                chord_notes.Add(escala_cromatica[seventh_note - 1]);
+                chord_notes.Add(escala_cromatica_8ve[first_note - 1]);
+                chord_notes.Add(escala_cromatica_8ve[third_note - 1]);
+                chord_notes.Add(escala_cromatica_8ve[fifth_note - 1]);
+                chord_notes.Add(escala_cromatica_8ve[seventh_note - 1]);
             }
             
 
@@ -254,7 +279,7 @@ public class ScaleChordsGenerator : MonoBehaviour
                 for (int i = 0; i < chord_notes.Count; i++){
                     string chordd = chord_notes[i];
                     if (chordd.Contains("#")){
-                        arranged_chord_notes.Add(sharpsNFlats[chordd]);
+                        arranged_chord_notes.Add(sharpsNFlats_8ve[chordd]);
                     }else{
                         arranged_chord_notes.Add(chordd);
                     }
