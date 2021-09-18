@@ -38,10 +38,11 @@ public class Player : MonoBehaviour
 
     [Header(" Armony Related ")]
     //harmony
-    public List<AudioClip> notes_list;
+    public List<AudioClip> notes_samples;
     public string tonality = "C";
     List<string> progression_to_use = new List<string>();
     List<List<string>> chords_list = new List<List<string>>();
+    List<List<int>> chords_list_num = new List<List<int>>();
 
     // arrays
     List<List<int>> rythm = new List<List<int>>();
@@ -107,6 +108,51 @@ public class Player : MonoBehaviour
 
         Debug.Log("progression");
         Debug.Log(string.Join(",", progression_to_use));
+
+
+
+        //TESTING CHORDS
+        
+        for (int c = 0; c < chords_list.Count; c++)
+        {
+            List<int> current_chord = new List<int>();
+            for (int e = 0; e < chords_list[c].Count; e++)
+            {
+                string noteName = chords_list[c][e];
+                if (noteName.Contains("b"))
+                {
+                    noteName = ScaleChordsGenerator.getSharpsFromFlat(noteName);
+                }
+                for (int i = 0; i < notes_samples.Count; i++)
+                {
+                    string sampleName = notes_samples[i].name;
+                    if (sampleName.Contains(noteName))
+                    {
+                        current_chord.Add(i);
+                        break;
+                    }
+                }
+            }
+            //Debug.Log("currentChord");
+            Debug.Log(string.Join(",", current_chord));
+            chords_list_num.Add(current_chord);
+        }
+        
+
+        for (int i = 0; i < notes_samples.Count; i++)
+        {
+            string sampleName = notes_samples[i].name;
+            //Debug.Log(sampleName);
+        }
+        List<int> ss = new List<int>() { 0, 4, 7, 11 };
+        foreach (int item in ss)
+        {
+            audioSource.PlayOneShot(notes_samples[item], 0.5f);
+        }
+        /*audioSource.PlayOneShot(notes_samples[0], 0.5f);
+        audioSource.PlayOneShot(notes_samples[4], 0.5f);
+        audioSource.PlayOneShot(notes_samples[7], 0.5f);
+        audioSource.PlayOneShot(notes_samples[11], 0.5f);*/
     }
 
 

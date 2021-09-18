@@ -73,7 +73,7 @@ public class ScaleChordsGenerator : MonoBehaviour
         
     }
 
-    private static string getSharpsFromFlat(string val){   
+    public static string getSharpsFromFlat(string val){   
         foreach (KeyValuePair<string, string> chord in sharpsNFlats_8ve){
             if (val.Equals(chord.Value)){
                 return chord.Key;
@@ -148,18 +148,18 @@ public class ScaleChordsGenerator : MonoBehaviour
 
                 for (int c = 0; c < arranged_scale.Count; c++)
                 {
-                    string the_chord;
-                    if(c == 4)
+                    List<string> the_chordd = new List<string>();
+                    if (c == 4) //para modificar el acorde dominante
                     {
-                        the_chord = string.Join(",", notesFromChord(arranged_scale[c],false,true));
+                        the_chordd = notesFromChord(arranged_scale[c], false, true);
                     }
                     else
                     {
-                        the_chord = string.Join(",", notesFromChord(arranged_scale[c]));
+                        the_chordd = notesFromChord(arranged_scale[c]);
                     }
                     
-                    Debug.Log(romanNumbers[c + 1] + ": " + arranged_scale[c] + " - " + the_chord);
-                    chords_list.Add(notesFromChord(arranged_scale[c]));
+                    Debug.Log(romanNumbers[c + 1] + ": " + arranged_scale[c] + " - " + string.Join(",", the_chordd));
+                    chords_list.Add(the_chordd);
                 }
             }
             else
@@ -180,18 +180,19 @@ public class ScaleChordsGenerator : MonoBehaviour
 
                 for (int c = 0; c < arranged_scale.Count; c++)
                 {
-                    string the_chord;
-                    if (c == 4)
+
+                    List<string> the_chordd = new List<string>();
+                    if (c == 4)  //para modificar el acorde dominante
                     {
-                        the_chord = string.Join(",", notesFromChord(arranged_scale[c], true, true));
+                        the_chordd = notesFromChord(arranged_scale[c], true, true);
                     }
                     else
                     {
-                        the_chord = string.Join(",", notesFromChord(arranged_scale[c], true));
+                        the_chordd = notesFromChord(arranged_scale[c], true);
                     }
                     
-                    Debug.Log(romanNumbers[c + 1] + ": " + arranged_scale[c] + " - " + the_chord);
-                    chords_list.Add(notesFromChord(arranged_scale[c],true));
+                    Debug.Log(romanNumbers[c + 1] + ": " + arranged_scale[c] + " - " + string.Join(",", the_chordd));
+                    chords_list.Add(the_chordd);
                 }
             }
 

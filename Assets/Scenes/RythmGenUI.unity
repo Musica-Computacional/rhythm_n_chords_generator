@@ -5081,7 +5081,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a428c2041930bd443abd1156f5f78ccb, type: 3}
   - {fileID: 8300000, guid: e6c5a1d6ed2b8a948a07d0d886de2806, type: 3}
   style: 0
-  notes_list:
+  notes_samples:
   - {fileID: 8300000, guid: d30ef1ae016483d4d8e7345339f48647, type: 3}
   - {fileID: 8300000, guid: 8c62601d8a586ac4d881e165351685f8, type: 3}
   - {fileID: 8300000, guid: a3125d0d33ab97745ad9407b966124c6, type: 3}
@@ -5106,7 +5106,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9d51bf01d25080042b9018f77338f7b3, type: 3}
   - {fileID: 8300000, guid: 7182f943cf3e8ad4a81ef6f257e7a97b, type: 3}
   - {fileID: 8300000, guid: 375503ac4d64d5a42b0d88fa14bacdba, type: 3}
-  note_name: C
+  tonality: C
   playMetronome: 1
   counterControl: 0
   counter: 0
