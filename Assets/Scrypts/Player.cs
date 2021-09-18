@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     public string time_signature; // "4/4"; // { "3/4", "4/4" };
     public string sub_division; // { "1/8", "1/16" };
 
-    [Header("UI Elements ")]
+    [Header(" UI Elements ")]
     public InputField tempoInput;
     public Dropdown metricDropdown;
     public Dropdown subDivDropdown;
@@ -21,13 +21,13 @@ public class Player : MonoBehaviour
     public Text fillerText;
     public Text progressionText;
 
-
+    [Header(" Tempo ")]
     //variables -------------------------------------------------------------
     public double bpm; //120.0F;
     private double interval = 0.0f;
     private double sub_interval = 0.0f;
 
-    //Samples -------------------------------------------------------------
+    [Header(" Rhythm Related ")]
     public AudioSource audioSource;
     //rhythm
     public List<AudioClip> tick;
@@ -35,26 +35,26 @@ public class Player : MonoBehaviour
     public List<AudioClip> clave;
     public List<AudioClip> filler;
     public int style;
+
+    [Header(" Armony Related ")]
     //harmony
     public List<AudioClip> notes_list;
+    public string tonality = "C";
+    List<string> progression_to_use = new List<string>();
+    List<List<string>> chords_list = new List<List<string>>();
 
-    //Rythm related
+    // arrays
     List<List<int>> rythm = new List<List<int>>();
     List<int> metric_pattern = new List<int>();
     List<int> clave_pattern = new List<int>();
     List<int> clave_pattern_int = new List<int>();
     List<int> filler_pattern = new List<int>();
     bool random_filler;
-
-    //Progression related
-    public string note_name = "C";
-    List<string> progression_to_use = new List<string>();
-
-    //Metronome -----------------------------
+    
+    [Header(" Metronome ")]
     public bool playMetronome = true;
     public int counterControl = 0;
     public int counter = 0;
-
     //Coroutine
     Coroutine co;
 
@@ -66,26 +66,24 @@ public class Player : MonoBehaviour
     public void GenerateRythm()
     {
 
-        //UI ------------
-        string styleName = styleDropdown.options[styleDropdown.value].text;
-        if (styleName == "lofi"){style = 0;}
-        else if (styleName == "pop"){style = 1;} 
-        else if (styleName == "techno"){style = 2;}
-
-        random_filler = randomFillerToggle.isOn;
-
-
         bpm = Double.Parse(tempoInput.text.ToString());
         sub_division = subDivDropdown.options[subDivDropdown.value].text;
 
         time_signature = metricDropdown.options[metricDropdown.value].text;
 
-        Debug.Log("bpm" + bpm);
-        Debug.Log("tsg" + time_signature);
-        Debug.Log("sub" + sub_division);
+        Debug.Log("bpm: " + bpm);
+        Debug.Log("time signature: " + time_signature);
+        Debug.Log("sub: " + sub_division);
 
-        
+
         //-- RHYTHM ------------
+        //Style
+        string styleName = styleDropdown.options[styleDropdown.value].text;
+        if (styleName == "lofi") { style = 0; }
+        else if (styleName == "pop") { style = 1; }
+        else if (styleName == "techno") { style = 2; }
+
+        random_filler = randomFillerToggle.isOn;
         rythm = RythmGenerator.Calculations(time_signature, sub_division, random_filler);
         metric_pattern = rythm[0];
         clave_pattern = rythm[1];
@@ -103,8 +101,12 @@ public class Player : MonoBehaviour
         Debug.Log("fill_pattern:   " + string.Join(",", filler_pattern));
 
         // HARMONY ------------------
-        progression_to_use = ScaleChordsGenerator.progressionToUse(note_name);
+        chords_list = ScaleChordsGenerator.chordsList(tonality);
+        progression_to_use = ScaleChordsGenerator.progressionToUse(chords_list);
         progressionText.GetComponent<Text>().text = "" + string.Join(",", progression_to_use);
+
+        Debug.Log("progression");
+        Debug.Log(string.Join(",", progression_to_use));
     }
 
 

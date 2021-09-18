@@ -349,15 +349,20 @@ public class ScaleChordsGenerator : MonoBehaviour
         }*/
 
 
-        Debug.Log("progression");
-        Debug.Log(string.Join(",", progression));
+        //Debug.Log("progression");
+        //Debug.Log(string.Join(",", progression));
         return progression;
     }
 
-    public static List<string> progressionToUse(string note_name)
+    public static List<List<string>> chordsList(string note_name)
     {
-        List<List<string>> chords_listt = scaleFromNote(note_name);
-        return progressionGenerator(chords_listt);
+        List<List<string>> chords_list = scaleFromNote(note_name);
+        return chords_list;
+    }
+
+    public static List<string> progressionToUse(List<List<string>> chords_list)
+    {
+        return progressionGenerator(chords_list);
     }
 
     private static List<string> verseGenerator(List<string> tonics, List<string> subdominants)
@@ -386,7 +391,6 @@ public class ScaleChordsGenerator : MonoBehaviour
                 { //se escogio tonica 
                     string ton = tonics[random_tonic];
                     //si el acorde de este compas es igual al acorde del anterior
-                    Debug.Log(i);
                     if (ton == progression[progression.Count - 1])
                     {
                         List<string> tonics_without_repeated_chord = new List<string>();
@@ -484,7 +488,6 @@ public class ScaleChordsGenerator : MonoBehaviour
                     { //sera tonica 
                         string ton = tonics[random_tonic];
                         //si el acorde de este compas es igual al acorde del anterior
-                        Debug.Log(i);
                         if (ton == progression[progression.Count - 1])
                         {
                             List<string> tonics_without_repeated_chord = new List<string>();
@@ -601,7 +604,6 @@ public class ScaleChordsGenerator : MonoBehaviour
                     { //se escogio tonica 
                         string ton = tonics[random_tonic];
                         //si el acorde de este compas es igual al acorde del anterior
-                        Debug.Log(i);
                         if (ton == progression[progression.Count - 1])
                         {
                             List<string> tonics_without_repeated_chord = new List<string>();
@@ -717,7 +719,6 @@ public class ScaleChordsGenerator : MonoBehaviour
                 { //se escogio tonica 
                     string ton = tonics[random_tonic];
                     //si el acorde de este compas es igual al acorde del anterior
-                    Debug.Log(i);
                     if (ton == progression[progression.Count - 1])
                     {
                         List<string> tonics_without_repeated_chord = new List<string>();
