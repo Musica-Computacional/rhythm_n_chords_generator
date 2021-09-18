@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     public string time_signature; // "4/4"; // { "3/4", "4/4" };
     public string sub_division; // { "1/8", "1/16" };
 
-    //UI things -----------------------------
+    [Header("UI Elements ")]
     public InputField tempoInput;
     public Dropdown metricDropdown;
     public Dropdown subDivDropdown;
@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     public Text metricText;
     public Text claveText;
     public Text fillerText;
+    public Text progressionText;
 
 
     //variables -------------------------------------------------------------
@@ -44,6 +45,10 @@ public class Player : MonoBehaviour
     List<int> clave_pattern_int = new List<int>();
     List<int> filler_pattern = new List<int>();
     bool random_filler;
+
+    //Progression related
+    public string note_name = "C";
+    List<string> progression_to_use = new List<string>();
 
     //Metronome -----------------------------
     public bool playMetronome = true;
@@ -79,8 +84,8 @@ public class Player : MonoBehaviour
         Debug.Log("tsg" + time_signature);
         Debug.Log("sub" + sub_division);
 
-        //-- ------------
-
+        
+        //-- RHYTHM ------------
         rythm = RythmGenerator.Calculations(time_signature, sub_division, random_filler);
         metric_pattern = rythm[0];
         clave_pattern = rythm[1];
@@ -92,11 +97,14 @@ public class Player : MonoBehaviour
         claveText.GetComponent<Text>().text = "" + string.Join(",", clave_pattern);
         fillerText.GetComponent<Text>().text = "" + string.Join(",", filler_pattern);
 
-
         Debug.Log("metric_pattern: " + string.Join(",", metric_pattern));
         Debug.Log("clave_pattern_int:  " + string.Join(",", clave_pattern_int));
         Debug.Log("clave_pattern:  " + string.Join(",", clave_pattern));
         Debug.Log("fill_pattern:   " + string.Join(",", filler_pattern));
+
+        // HARMONY ------------------
+        progression_to_use = ScaleChordsGenerator.progressionToUse(note_name);
+        progressionText.GetComponent<Text>().text = "" + string.Join(",", progression_to_use);
     }
 
 

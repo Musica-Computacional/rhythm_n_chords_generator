@@ -7,13 +7,13 @@ public class ScaleChordsGenerator : MonoBehaviour
 
     public string note_name = "C";
 
-    private List<string> circulo_quintas_mayores = new List<string>() { "C", "G", "D", "A", "E", "B", "Gb", "Db", "Ab", "Eb", "Bb", "F" };
-    private List<string> circulo_quintas_menores = new List<string>() { "Am", "Em", "Bm", "F#m", "C#m", "G#m", "Ebm", "Bbm", "Fm", "Cm", "Gm", "Dm" };
+    private static List<string> circulo_quintas_mayores = new List<string>() { "C", "G", "D", "A", "E", "B", "Gb", "Db", "Ab", "Eb", "Bb", "F" };
+    private static List<string> circulo_quintas_menores = new List<string>() { "Am", "Em", "Bm", "F#m", "C#m", "G#m", "Ebm", "Bbm", "Fm", "Cm", "Gm", "Dm" };
 
-    private List<string> escala_cromatica_8ve   = new List<string>() { "C3", "C3#", "D3", "D3#", "E3", "F3", "F3#", "G3", "G3#", "A3", "A3#", "B3", "C4", "C4#", "D4", "D4#", "E4", "F4", "F4#", "G4", "G4#", "A4", "A4#", "B4", "C5", "C5#", "D5" };
-    private List<string> escala_cromatica       = new List<string>() { "C",  "C#",  "D",  "D#",  "E",  "F",  "F#",  "G",  "G#",  "A",  "A#",  "B",  "C",  "C#",  "D",  "D#",  "E",  "F",  "F#",  "G",  "G#",  "A",  "A#",  "B",  "C",  "C#",  "D"  };
+    private static List<string> escala_cromatica_8ve   = new List<string>() { "C3", "C3#", "D3", "D3#", "E3", "F3", "F3#", "G3", "G3#", "A3", "A3#", "B3", "C4", "C4#", "D4", "D4#", "E4", "F4", "F4#", "G4", "G4#", "A4", "A4#", "B4", "C5", "C5#", "D5" };
+    private static List<string> escala_cromatica       = new List<string>() { "C",  "C#",  "D",  "D#",  "E",  "F",  "F#",  "G",  "G#",  "A",  "A#",  "B",  "C",  "C#",  "D",  "D#",  "E",  "F",  "F#",  "G",  "G#",  "A",  "A#",  "B",  "C",  "C#",  "D"  };
 
-    private Dictionary<string, string> sharpsNFlats = new Dictionary<string, string>() { 
+    private static Dictionary<string, string> sharpsNFlats = new Dictionary<string, string>() { 
         { "C#"  ,"Db"  },
         { "C#m" ,"Dbm" },
         { "D#"  ,"Eb"  },
@@ -26,7 +26,7 @@ public class ScaleChordsGenerator : MonoBehaviour
         { "A#m" ,"Bbm" },
     };
 
-    private Dictionary<string, string> sharpsNFlats_8ve = new Dictionary<string, string>() {
+    private static Dictionary<string, string> sharpsNFlats_8ve = new Dictionary<string, string>() {
         { "C3#"  ,"D3b"  },
         { "C3#m" ,"D3bm" },
         { "D3#"  ,"E3b"  },
@@ -50,7 +50,7 @@ public class ScaleChordsGenerator : MonoBehaviour
         { "A4#m" ,"B4bm" },
     };
 
-    private Dictionary<int, string> romanNumbers = new Dictionary<int, string>() {
+    private static Dictionary<int, string> romanNumbers = new Dictionary<int, string>() {
         { 1,"I    Tonica" },
         { 2,"II   Subdominante" },
         { 3,"III  Tonica" },
@@ -73,7 +73,7 @@ public class ScaleChordsGenerator : MonoBehaviour
         
     }
 
-    private string getSharpsFromFlat(string val){   
+    private static string getSharpsFromFlat(string val){   
         foreach (KeyValuePair<string, string> chord in sharpsNFlats_8ve){
             if (val.Equals(chord.Value)){
                 return chord.Key;
@@ -82,7 +82,7 @@ public class ScaleChordsGenerator : MonoBehaviour
         return "El acorde # no existe";
     }
 
-    private List<List<string>> scaleFromNote(string note)
+    private static List<List<string>> scaleFromNote(string note)
     {
         bool sharp = false;
         if (note.Contains("#"))
@@ -205,7 +205,7 @@ public class ScaleChordsGenerator : MonoBehaviour
 
     }
 
-    private List<string> notesFromChord(string chord, bool flat_scale=false,bool dominant=false)
+    private static List<string> notesFromChord(string chord, bool flat_scale=false,bool dominant=false)
     {
         bool minor = false;
         bool flat = false;
@@ -294,7 +294,7 @@ public class ScaleChordsGenerator : MonoBehaviour
         }
     }
 
-    public List<string> progressionGenerator(List<List<string>> chords_list){
+    private static List<string> progressionGenerator(List<List<string>> chords_list){
         Dictionary<string, List<string>> chords_dict = new Dictionary<string, List<string>>(){
             {"1", chords_list[0]},
             {"2", chords_list[1]},
@@ -322,19 +322,31 @@ public class ScaleChordsGenerator : MonoBehaviour
         for (int i = 0; i < verse2.Count; i++){
             progression.Add(verse2[i]);
         }
-        List<string> chorus1 = chorusGenerator(tonics, subdominants, dominants, sensibles,1);
+        /*List<string> chorus1 = chorusGenerator(tonics, subdominants, dominants, sensibles,1);
         for (int i = 0; i < chorus1.Count; i++) {
+            progression.Add(chorus1[i]);
+        }
+        for (int i = 0; i < chorus1.Count; i++)
+        {
             progression.Add(chorus1[i]);
         }
         for (int i = 0; i < verse2.Count; i++)
         {
             progression.Add(verse2[i]);
         }
+        for (int i = 0; i < chorus1.Count; i++)
+        {
+            progression.Add(chorus1[i]);
+        }
         List<string> chorus2 = chorusGenerator(tonics, subdominants, dominants, sensibles, 2);
         for (int i = 0; i < chorus2.Count; i++)
         {
             progression.Add(chorus2[i]);
         }
+        for (int i = 0; i < verse1.Count; i++)
+        {
+            progression.Add(verse1[i]);
+        }*/
 
 
         Debug.Log("progression");
@@ -342,8 +354,13 @@ public class ScaleChordsGenerator : MonoBehaviour
         return progression;
     }
 
+    public static List<string> progressionToUse(string note_name)
+    {
+        List<List<string>> chords_listt = scaleFromNote(note_name);
+        return progressionGenerator(chords_listt);
+    }
 
-    private List<string> verseGenerator(List<string> tonics, List<string> subdominants)
+    private static List<string> verseGenerator(List<string> tonics, List<string> subdominants)
     {
         List<string> progression = new List<string>();
 
@@ -432,7 +449,7 @@ public class ScaleChordsGenerator : MonoBehaviour
         return progression;
     }
 
-    private List<string> chorusGenerator(List<string> tonics, List<string> subdominants, List<string> dominants, List<string> sensibles,int chorus = 1)
+    private static List<string> chorusGenerator(List<string> tonics, List<string> subdominants, List<string> dominants, List<string> sensibles,int chorus = 1)
     {
         List<string> progression = new List<string>();
 
@@ -450,7 +467,7 @@ public class ScaleChordsGenerator : MonoBehaviour
         {
             for (int i = 1; i < 5; i++)
             {
-                random_tonic = Random.Range(0, 3); //plus 1 because the max value is not included
+                random_tonic = Random.Range(0, 2); //plus 1 because the max value is not included
                 random_subd = Random.Range(0, 2); //plus 1 because the max value is not included
                 //primer compas siempre tendra tonica
                 if (i == 1)
