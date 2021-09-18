@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     public Dropdown metricDropdown;
     public Dropdown subDivDropdown;
     public Dropdown styleDropdown;
+    public Dropdown tonalityDropdown;
     public Toggle randomFillerToggle;
     public Text metricText;
     public Text claveText;
@@ -40,7 +41,7 @@ public class Player : MonoBehaviour
     [Header(" Armony Related ")]
     //harmony
     public List<AudioClip> notes_samples;
-    public string tonality = "C";
+    public string tonality; //= "C";
     List<string> progression_to_use = new List<string>();
     List<List<string>> chords_list = new List<List<string>>();
     List<List<int>> chords_list_num = new List<List<int>>();
@@ -69,6 +70,7 @@ public class Player : MonoBehaviour
 
     public void GenerateRythm()
     {
+        audioSource.Stop();
 
         bpm = Double.Parse(tempoInput.text.ToString());
         sub_division = subDivDropdown.options[subDivDropdown.value].text;
@@ -105,17 +107,19 @@ public class Player : MonoBehaviour
         Debug.Log("fill_pattern:   " + string.Join(",", filler_pattern));
 
         // HARMONY ------------------
+        tonality = tonalityDropdown.options[tonalityDropdown.value].text;
+        Debug.Log("tonality");
+        Debug.Log(tonality);
         chords_list = ScaleChordsGenerator.chordsList(tonality);
         progression_to_use = ScaleChordsGenerator.progressionToUse(chords_list);
-        progressionText.GetComponent<Text>().text = "" + string.Join(",", progression_to_use);
-
         Debug.Log("progression");
         Debug.Log(string.Join(",", progression_to_use));
 
+        progressionText.GetComponent<Text>().text = "" + string.Join(",", progression_to_use);
 
 
-        //TESTING CHORDS
-        
+        //FILLING CHORDS NUMBER LIST
+        chords_list_num = new List<List<int>>();
         for (int c = 0; c < chords_list.Count; c++)
         {
             List<int> current_chord = new List<int>();
@@ -124,7 +128,7 @@ public class Player : MonoBehaviour
                 string noteName = chords_list[c][e];
                 if (noteName.Contains("b"))
                 {
-                    noteName = ScaleChordsGenerator.getSharpsFromFlat(noteName);
+                    noteName = ScaleChordsGenerator.getSharpsFromFlat_8ve(noteName);
                 }
                 for (int i = 0; i < notes_samples.Count; i++)
                 {
@@ -142,7 +146,7 @@ public class Player : MonoBehaviour
         }
 
         int ranChord = Random.Range(0, 8);
-        PlayAChord(chords_list_num[ranChord]); //dominante novena con bajo en 5ta
+        PlayAChord(chords_list_num[0]); //dominante novena con bajo en 5ta
 
 
         /*audioSource.PlayOneShot(notes_samples[0], 0.5f);
@@ -174,7 +178,8 @@ public class Player : MonoBehaviour
         if (num_cur_chord != previous_chord)
         {
             //audioSource.Stop(notes_samples[previous_chord], 0.5f);
-            PlayAChord(chords_list_num[num_cur_chord]);
+            Debug.Log(num_cur_chord-1);
+            PlayAChord(chords_list_num[num_cur_chord-1]);
         }
         else if (num_cur_chord == previous_chord)
         {
@@ -215,7 +220,7 @@ public class Player : MonoBehaviour
 
     public void StopRythm()
     {
-
+        audioSource.Stop();
         counterControl = 0;
         counter = 0;
         counter_progression = 0;
@@ -238,7 +243,7 @@ public class Player : MonoBehaviour
             {
                 PlayChordsWithRythm();
 
-                Debug.Log("clave beat: " + EvalClavePattern());
+                //Debug.Log("clave beat: " + EvalClavePattern());
 
                 //001
                 if (EvalFillerPattern() == false && EvalClavePattern() == false && EvalMetricPattern() == true )

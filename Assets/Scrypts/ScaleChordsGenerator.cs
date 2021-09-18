@@ -74,8 +74,21 @@ public class ScaleChordsGenerator : MonoBehaviour
     }
 
     public static string getSharpsFromFlat(string val){   
-        foreach (KeyValuePair<string, string> chord in sharpsNFlats_8ve){
+        foreach (KeyValuePair<string, string> chord in sharpsNFlats)
+        {
             if (val.Equals(chord.Value)){
+                return chord.Key;
+            }
+        }
+        return "El acorde # no existe";
+    }
+
+    public static string getSharpsFromFlat_8ve(string val)
+    {
+        foreach (KeyValuePair<string, string> chord in sharpsNFlats_8ve)
+        {
+            if (val.Equals(chord.Value))
+            {
                 return chord.Key;
             }
         }
@@ -170,7 +183,9 @@ public class ScaleChordsGenerator : MonoBehaviour
                     string chord = scale[i];
                     if (chord.Contains("#"))
                     {
-                        arranged_scale.Add(sharpsNFlats_8ve[chord]);
+                        string ch = sharpsNFlats[chord];
+
+                        arranged_scale.Add(ch);
                     }
                     else
                     {
@@ -247,7 +262,20 @@ public class ScaleChordsGenerator : MonoBehaviour
                 third_note = 5 + index;
                 fifth_note = 8 + index;
                 bass_note = fifth_note - 12;
-                chord_notes.Add(escala_cromatica_8ve[bass_note - 1]);
+                if(bass_note < 0)
+                {
+                    first_note = first_note + 12;
+                    ninth_note = ninth_note + 12;
+                    third_note = third_note + 12;
+                    fifth_note = fifth_note + 12;
+                    bass_note = bass_note + 12;
+                }
+                if (bass_note != 0)
+                {
+                    bass_note = bass_note - 1;
+                }
+
+                chord_notes.Add(escala_cromatica_8ve[bass_note]);
                 chord_notes.Add(escala_cromatica_8ve[first_note - 1]);
                 chord_notes.Add(escala_cromatica_8ve[ninth_note - 1]);
                 chord_notes.Add(escala_cromatica_8ve[third_note - 1]);
