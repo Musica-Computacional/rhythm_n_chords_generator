@@ -323,7 +323,7 @@ public class ScaleChordsGenerator : MonoBehaviour
         for (int i = 0; i < verse2.Count; i++){
             progression.Add(verse2[i]);
         }
-        /*List<string> chorus1 = chorusGenerator(tonics, subdominants, dominants, sensibles,1);
+        List<string> chorus1 = chorusGenerator(tonics, subdominants, dominants, sensibles,1);
         for (int i = 0; i < chorus1.Count; i++) {
             progression.Add(chorus1[i]);
         }
@@ -347,7 +347,7 @@ public class ScaleChordsGenerator : MonoBehaviour
         for (int i = 0; i < verse1.Count; i++)
         {
             progression.Add(verse1[i]);
-        }*/
+        }
 
 
         //Debug.Log("progression");

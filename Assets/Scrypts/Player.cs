@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour
 {
@@ -43,6 +44,7 @@ public class Player : MonoBehaviour
     List<string> progression_to_use = new List<string>();
     List<List<string>> chords_list = new List<List<string>>();
     List<List<int>> chords_list_num = new List<List<int>>();
+    int previous_chord = 10; //there are only 7 chords in the scale, this is just for initializing
 
     // arrays
     List<List<int>> rythm = new List<List<int>>();
@@ -56,6 +58,7 @@ public class Player : MonoBehaviour
     public bool playMetronome = true;
     public int counterControl = 0;
     public int counter = 0;
+    public int counter_progression = 0;
     //Coroutine
     Coroutine co;
 
@@ -137,25 +140,51 @@ public class Player : MonoBehaviour
             Debug.Log(string.Join(",", current_chord));
             chords_list_num.Add(current_chord);
         }
-        
 
-        for (int i = 0; i < notes_samples.Count; i++)
-        {
-            string sampleName = notes_samples[i].name;
-            //Debug.Log(sampleName);
-        }
-        List<int> ss = new List<int>() { 0, 4, 7, 11 };
-        foreach (int item in ss)
-        {
-            audioSource.PlayOneShot(notes_samples[item], 0.5f);
-        }
+        int ranChord = Random.Range(0, 8);
+        PlayAChord(chords_list_num[ranChord]); //dominante novena con bajo en 5ta
+
+
         /*audioSource.PlayOneShot(notes_samples[0], 0.5f);
         audioSource.PlayOneShot(notes_samples[4], 0.5f);
         audioSource.PlayOneShot(notes_samples[7], 0.5f);
         audioSource.PlayOneShot(notes_samples[11], 0.5f);*/
     }
 
+    private void PlayAChord(List<int> chord)
+    {
+        foreach (int item in chord)
+        {
+            audioSource.PlayOneShot(notes_samples[item], 0.35f);
+        }
+    }
 
+    private void PlayChordsWithRythm(List<int> chord = null)
+    {
+        if (counter_progression == progression_to_use.Count)
+        {
+            StopRythm();
+        }
+
+
+        int internProgression = (int)time_signature[0];
+        int indexx = counter % internProgression;
+        int num_cur_chord = int.Parse(progression_to_use[counter_progression]);
+        
+        if (num_cur_chord != previous_chord)
+        {
+            //audioSource.Stop(notes_samples[previous_chord], 0.5f);
+            PlayAChord(chords_list_num[num_cur_chord]);
+        }
+        else if (num_cur_chord == previous_chord)
+        {
+            //audioSource.PlayOneShot(notes_samples[num_cur_chord], 0.5f);
+            // poop
+        }
+
+        previous_chord = int.Parse(progression_to_use[counter_progression]);
+
+    }
 
     private bool EvalFillerPattern()
     {
@@ -189,6 +218,7 @@ public class Player : MonoBehaviour
 
         counterControl = 0;
         counter = 0;
+        counter_progression = 0;
         StopCoroutine(co);
     }
 
@@ -206,6 +236,8 @@ public class Player : MonoBehaviour
             audioSource.PlayOneShot(tick[style], 0.5f);
             if (counterControl % 2 == 0)
             {
+                PlayChordsWithRythm();
+
                 Debug.Log("clave beat: " + EvalClavePattern());
 
                 //001
@@ -257,6 +289,7 @@ public class Player : MonoBehaviour
                 }
                 
                 counter++;
+                counter_progression++;
                 if (time_signature.StartsWith("4"))
                 {
                     if (counter == 16)
