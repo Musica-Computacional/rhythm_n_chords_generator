@@ -1,6 +1,6 @@
 <h1 align="center">
 <br>
-  <img src="https://sc1.musik-produktiv.com/pic-010072421xl/tama-rhythm-mate-20-white-complete-drumset.jpg" alt="drumset" width="460" height="460">
+  <img src="https://www.oasisacademytemple.org/uploaded/Temple/Page_Photographs/music-colour-splash.jpg" alt="drumset" width="800" height="460">
 <br>
 <br>
 Generador de Ritmos y Escalas
